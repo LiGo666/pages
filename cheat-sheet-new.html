@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assessment Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Manrope", sans-serif;
+    background: #fdf6ec;
+    color: #2a1800;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .wrap { max-width: 1600px; margin: 0 auto; padding: 40px 48px 60px; }
+
+  /* ── FLOW SPINE ── */
+  .connector { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .arrow {
+    width: 2px; height: 36px;
+    background: linear-gradient(180deg, #e8720a, #f5a623);
+    position: relative; flex-shrink: 0;
+  }
+  .arrow::after {
+    content: "▼"; position: absolute; bottom: -10px; left: 50%;
+    transform: translateX(-50%); color: #e8720a; font-size: 11px;
+  }
+
+  /* ── BRANCH LABEL ── */
+  .branch-label {
+    font-size: 10px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 2.5px; color: #c9a070;
+    text-align: center; padding: 8px 0 10px;
+  }
+
+  /* ── FLOW STEP ── */
+  .step {
+    background: #fff; border: 1.5px solid #e8d5b0;
+    border-radius: 16px; padding: 24px 28px; width: 100%;
+    box-shadow: 0 2px 10px rgba(196,80,0,0.05);
+  }
+  .step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 9px;
+    font-size: 14px; font-weight: 900; color: #fff;
+    background: #e8720a; flex-shrink: 0;
+  }
+  .step-title { font-size: 17px; font-weight: 900; color: #2a1800; }
+
+  /* ══════════════════════════════════
+     4 TYPE CARDS
+  ══════════════════════════════════ */
+  .types {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 12px; width: 100%;
+  }
+  .type {
+    border-radius: 14px; padding: 20px 18px 22px;
+    border: 2px solid transparent;
+    display: flex; flex-direction: column;
+  }
+  .type.t1 { background: #fffbf0; border-color: #f5a623; }
+  .type.t2 { background: #fff4ef; border-color: #e8520a; }
+  .type.t3 { background: #f2fae8; border-color: #5a9a10; }
+  .type.t4 { background: #f6eeff; border-color: #8a4abf; }
+
+  .type-badge {
+    width: 34px; height: 34px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 900; color: #fff;
+    flex-shrink: 0; margin-bottom: 10px;
+  }
+  .t1 .type-badge { background: #f5a623; }
+  .t2 .type-badge { background: #e8520a; }
+  .t3 .type-badge { background: #5a9a10; }
+  .t4 .type-badge { background: #8a4abf; }
+
+  .type-name { font-size: 13px; font-weight: 900; letter-spacing: 0.3px; margin-bottom: 10px; }
+  .t1 .type-name { color: #a06800; }
+  .t2 .type-name { color: #a03000; }
+  .t3 .type-name { color: #3a6800; }
+  .t4 .type-name { color: #5a1a8a; }
+
+  .type-triggers { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+  .pill { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; line-height: 1.3; }
+  .t1 .pill { background: rgba(245,166,35,0.18); color: #a06800; }
+  .t2 .pill { background: rgba(232,82,10,0.14); color: #a03000; }
+  .t3 .pill { background: rgba(90,154,16,0.14); color: #3a6800; }
+  .t4 .pill { background: rgba(138,74,191,0.14); color: #5a1a8a; }
+
+  .type-divider { height: 1px; margin-bottom: 12px; }
+  .t1 .type-divider { background: rgba(245,166,35,0.3); }
+  .t2 .type-divider { background: rgba(232,82,10,0.2); }
+  .t3 .type-divider { background: rgba(90,154,16,0.2); }
+  .t4 .type-divider { background: rgba(138,74,191,0.2); }
+
+  .type-format-label {
+    font-size: 9px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 1.2px; margin-bottom: 8px;
+  }
+  .t1 .type-format-label { color: #c9900a; }
+  .t2 .type-format-label { color: #c04000; }
+  .t3 .type-format-label { color: #4a8000; }
+  .t4 .type-format-label { color: #6a2a9a; }
+
+  .format-steps { display: flex; flex-direction: column; gap: 6px; }
+  .format-row { display: flex; align-items: flex-start; gap: 8px; }
+  .format-letter {
+    width: 22px; height: 22px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 900; color: #fff;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .t1 .format-letter { background: #f5a623; }
+  .t2 .format-letter { background: #e8520a; }
+  .t3 .format-letter { background: #5a9a10; }
+  .t4 .format-letter { background: #8a4abf; }
+
+  .format-text { font-size: 12px; color: #4a3010; line-height: 1.5; }
+  .format-text strong { font-weight: 800; }
+  .t1 .format-text strong { color: #a06800; }
+  .t2 .format-text strong { color: #a03000; }
+  .t3 .format-text strong { color: #3a6800; }
+  .t4 .format-text strong { color: #5a1a8a; }
+
+  /* ══════════════════════════════════
+     ANCHORS + IGNITION — 2 rows of 3
+  ══════════════════════════════════ */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 12px; width: 100%;
+  }
+
+  .blank-card { border-radius: 13px; padding: 20px 22px; }
+  .blank-start { background: #fffbf0; border: 2px solid #f5a623; }
+  .blank-stuck { background: #fff4ef; border: 2px solid #e8720a; }
+  .blank-end   { background: #f2fae8; border: 2px solid #5a9a10; }
+
+  .blank-label {
+    font-size: 10px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 1.8px; margin-bottom: 14px;
+  }
+  .blank-start .blank-label { color: #a06800; }
+  .blank-stuck .blank-label { color: #a03000; }
+  .blank-end   .blank-label { color: #3a6800; }
+
+  .blank-anchor {
+    font-size: 14px; font-weight: 700; line-height: 1.45;
+    margin-bottom: 10px; color: #2a1800;
+    padding-left: 14px; border-left: 3px solid;
+    white-space: nowrap;
+  }
+  .blank-anchor:last-child { margin-bottom: 0; }
+  .blank-start .blank-anchor { border-color: #f5a623; }
+  .blank-stuck .blank-anchor { border-color: #e8720a; }
+  .blank-end   .blank-anchor { border-color: #5a9a10; }
+
+  .ig-card {
+    border-radius: 13px; padding: 20px 22px;
+    background: #fff8f0; border: 2px solid #e8d0a8;
+  }
+  .ig-group-label {
+    font-size: 10px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .ig-card.ig-instinct .ig-group-label { color: #c9900a; }
+  .ig-card.ig-systems  .ig-group-label { color: #c04000; }
+  .ig-card.ig-self     .ig-group-label { color: #3a6800; }
+
+  .ig-phrase {
+    font-size: 14px; font-weight: 700; color: #2a1800;
+    padding: 4px 0 4px 14px;
+    border-left: 3px solid #f5a623;
+    margin-bottom: 10px; line-height: 1.4;
+    white-space: nowrap;
+  }
+  .ig-phrase:last-child { margin-bottom: 0; }
+  .ig-phrase.red   { border-color: #e8520a; }
+  .ig-phrase.green { border-color: #5a9a10; }
+
+  /* ══════════════════════════════════
+     SCORE BOOSTERS
+  ══════════════════════════════════ */
+  .boosters {
+    background: #fff0f5; border: 1.5px solid #d4407a;
+    border-radius: 13px; padding: 16px 20px; width: 100%;
+  }
+  .boosters-label {
+    font-size: 9px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 1.8px; color: #a0205a; margin-bottom: 12px;
+  }
+  .booster-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .booster {
+    font-size: 13px; font-weight: 800;
+    background: rgba(212,64,122,0.1); color: #a0205a;
+    padding: 6px 16px; border-radius: 20px;
+    border: 1.5px solid rgba(212,64,122,0.25);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .types      { grid-template-columns: repeat(2, 1fr); }
+    .bottom-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<div class="connector">
+
+  <div class="branch-label">last sentence — which type is it?</div>
+
+  <!-- ── 4 TYPE CARDS ── -->
+  <div class="types">
+
+    <div class="type t1">
+      <div class="type-badge">1</div>
+      <div class="type-name">STORY</div>
+      <div class="type-triggers">
+        <span class="pill">tell me about</span>
+        <span class="pill">walk me through</span>
+        <span class="pill">give me an example</span>
+      </div>
+      <div class="type-divider"></div>
+      <div class="type-format-label">Format</div>
+      <div class="format-steps">
+        <div class="format-row"><div class="format-letter">S</div><div class="format-text"><strong>Situation</strong> — When [this happened]</div></div>
+        <div class="format-row"><div class="format-letter">T</div><div class="format-text"><strong>Task</strong> — I needed to [task]</div></div>
+        <div class="format-row"><div class="format-letter">A</div><div class="format-text"><strong>Action</strong> — I [said/did exactly X]</div></div>
+        <div class="format-row"><div class="format-letter">R</div><div class="format-text"><strong>Result</strong> — [What changed]</div></div>
+      </div>
+    </div>
+
+    <div class="type t2">
+      <div class="type-badge">2</div>
+      <div class="type-name">SELF-CRITIC</div>
+      <div class="type-triggers">
+        <span class="pill">barrier</span>
+        <span class="pill">went wrong</span>
+        <span class="pill">you were wrong</span>
+        <span class="pill">didn't happen</span>
+      </div>
+      <div class="type-divider"></div>
+      <div class="type-format-label">Format</div>
+      <div class="format-steps">
+        <div class="format-row"><div class="format-letter">S</div><div class="format-text"><strong>Situation</strong> — What happened / what I did wrong</div></div>
+        <div class="format-row"><div class="format-letter">A</div><div class="format-text"><strong>Admit</strong> — What I owned in that moment</div></div>
+        <div class="format-row"><div class="format-letter">R</div><div class="format-text"><strong>Learning</strong> — What I do differently now</div></div>
+      </div>
+    </div>
+
+    <div class="type t3">
+      <div class="type-badge">3</div>
+      <div class="type-name">SELF-FIX</div>
+      <div class="type-triggers">
+        <span class="pill">since then</span>
+        <span class="pill">development area</span>
+        <span class="pill">what have you done</span>
+        <span class="pill">address that</span>
+      </div>
+      <div class="type-divider"></div>
+      <div class="type-format-label">Format</div>
+      <div class="format-steps">
+        <div class="format-row"><div class="format-letter">S</div><div class="format-text"><strong>Gap</strong> — The feedback / development area named</div></div>
+        <div class="format-row"><div class="format-letter">A</div><div class="format-text"><strong>Change</strong> — The specific thing I did differently</div></div>
+        <div class="format-row"><div class="format-letter">R</div><div class="format-text"><strong>Evidence</strong> — Proof it worked (named moment)</div></div>
+      </div>
+    </div>
+
+    <div class="type t4">
+      <div class="type-badge">4</div>
+      <div class="type-name">EXTERNAL</div>
+      <div class="type-triggers">
+        <span class="pill">compare</span>
+        <span class="pill">benchmark</span>
+        <span class="pill">outside</span>
+        <span class="pill">who is ahead</span>
+      </div>
+      <div class="type-divider"></div>
+      <div class="type-format-label">Format — not STAR</div>
+      <div class="format-steps">
+        <div class="format-row"><div class="format-letter">N</div><div class="format-text"><strong>Name</strong> — One external reference</div></div>
+        <div class="format-row"><div class="format-letter">P</div><div class="format-text"><strong>Position</strong> — What they do differently</div></div>
+        <div class="format-row"><div class="format-letter">W</div><div class="format-text"><strong>Why</strong> — You took it or rejected it</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="arrow"></div>
+
+  <!-- ── ANCHORS + IGNITION — 6 columns ── -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <div class="step-title">Gone blank? Use these anchors</div>
+    </div>
+    <div class="bottom-grid">
+
+      <div class="blank-card blank-start">
+        <div class="blank-label">To start</div>
+        <div class="blank-anchor">"There was a moment with [name]…"</div>
+        <div class="blank-anchor">"When we did the Claude rollout…"</div>
+        <div class="blank-anchor">"One time security pushed back…"</div>
+      </div>
+
+      <div class="blank-card blank-stuck">
+        <div class="blank-label">If stuck mid-answer</div>
+        <div class="blank-anchor">"What I actually did was…"</div>
+        <div class="blank-anchor">"The thing that changed was…"</div>
+        <div class="blank-anchor">"And that worked because…"</div>
+      </div>
+
+      <div class="blank-card blank-end">
+        <div class="blank-label">To land it</div>
+        <div class="blank-anchor">"The result was [specific thing]."</div>
+        <div class="blank-anchor">"Since then I always…"</div>
+        <div class="blank-anchor">"That's how I know it worked."</div>
+      </div>
+
+      <div class="ig-card ig-instinct">
+        <div class="ig-group-label">Instinct → story</div>
+        <div class="ig-phrase">Instinct told me, others not seeing…</div>
+        <div class="ig-phrase">Noticed a pattern before the group did…</div>
+        <div class="ig-phrase">Something felt wrong — turned out to be…</div>
+      </div>
+
+      <div class="ig-card ig-systems">
+        <div class="ig-group-label">Systems thinking</div>
+        <div class="ig-phrase red">Stepped back — what does this mean downstream…</div>
+        <div class="ig-phrase red">Real question underneath was…</div>
+        <div class="ig-phrase red">Others saw X — I saw Y because…</div>
+      </div>
+
+      <div class="ig-card ig-self">
+        <div class="ig-group-label">Honest self-awareness</div>
+        <div class="ig-phrase green">Caught myself doing X — stopped and…</div>
+        <div class="ig-phrase green">First instinct was wrong — instead I…</div>
+        <div class="ig-phrase green">Realized I was the problem…</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+
+  <!-- ── SCORE BOOSTERS ── -->
+  <div class="boosters">
+    <div class="boosters-label">Score boosters — drop into any answer</div>
+    <div class="booster-row">
+      <span class="booster">"I owned…"</span>
+      <span class="booster">"I asked them first…"</span>
+      <span class="booster">"The evidence was…"</span>
+      <span class="booster">"What changed in them was…"</span>
+      <span class="booster">"I ensured trust by…"</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+</body>
+</html>
