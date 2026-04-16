@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE WIT(H)NESS — Experience Workshop</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a08;
+    --near-black: #141410;
+    --dark: #1c1c18;
+    --warm-grey: #2a2a24;
+    --mid-grey: #6b6b60;
+    --light-grey: #a8a89c;
+    --cream: #e8e4d8;
+    --warm-white: #f4f0e4;
+    --amber: #c8944c;
+    --amber-dim: #a07838;
+    --amber-glow: #d4a85c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+    background: var(--black);
+  }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--cream);
+    background: var(--black);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 2rem;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 50%, rgba(200, 148, 76, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cover-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--mid-grey);
+    margin-bottom: 4rem;
+    opacity: 0;
+    animation: fadeIn 1.5s ease 0.3s forwards;
+  }
+
+  .cover-title {
+    font-size: clamp(2.8rem, 7.5vw, 6rem);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 0.4em;
+    opacity: 0;
+    animation: fadeIn 2s ease 0.6s forwards;
+  }
+
+  .cover-title .h-bracket {
+    color: var(--amber-dim);
+    font-weight: 300;
+    transition: color 0.6s ease;
+  }
+
+  .cover-title:hover .h-bracket {
+    color: var(--amber-glow);
+  }
+
+  .cover-subtitle {
+    font-size: clamp(0.95rem, 2vw, 1.2rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--light-grey);
+    text-align: center;
+    max-width: 30em;
+    margin-bottom: 5rem;
+    opacity: 0;
+    animation: fadeIn 2s ease 1s forwards;
+  }
+
+  .cover-meta {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--mid-grey);
+    text-align: center;
+    line-height: 2.2;
+    opacity: 0;
+    animation: fadeIn 1.5s ease 1.4s forwards;
+  }
+
+  .cover-meta span { display: block; }
+
+  .cover-meta .sep {
+    display: inline-block;
+    width: 2em;
+    height: 1px;
+    background: var(--warm-grey);
+    vertical-align: middle;
+    margin: 1.5rem auto;
+  }
+
+  .cover-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--mid-grey);
+    opacity: 0;
+    animation: fadeIn 1.5s ease 2s forwards, pulse 3s ease-in-out 3s infinite;
+  }
+
+  .cover-scroll::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 2rem;
+    background: linear-gradient(to bottom, var(--mid-grey), transparent);
+    margin: 0.8rem auto 0;
+  }
+
+  .section {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: var(--amber-dim);
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+
+  .section-title {
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+    margin-bottom: 2rem;
+    color: var(--warm-white);
+  }
+
+  .section-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--amber);
+  }
+
+  p {
+    margin-bottom: 1.3em;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--cream);
+  }
+
+  p.lead {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--warm-white);
+    line-height: 1.8;
+  }
+
+  p.quiet {
+    font-size: 0.9rem;
+    color: var(--light-grey);
+    font-style: italic;
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--warm-white);
+  }
+
+  .divider {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 1px;
+  }
+
+  .divider::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--warm-grey), transparent);
+  }
+
+  .pullquote {
+    max-width: 700px;
+    margin: 3rem auto;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .pullquote p {
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.65;
+    color: var(--light-grey);
+    margin-bottom: 0;
+  }
+
+  .format-block {
+    background: var(--near-black);
+    border-left: 1px solid var(--warm-grey);
+    padding: 1.6rem 1.8rem 1.6rem 2rem;
+    margin: 1.8rem 0;
+  }
+
+  .format-block .block-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--light-grey);
+    margin-bottom: 0.8rem;
+  }
+
+  .format-block p {
+    font-size: 0.92rem;
+    margin-bottom: 0.7em;
+    color: var(--cream);
+  }
+
+  .format-block p:last-child { margin-bottom: 0; }
+
+  /* === QUICK-INFO TABLE === */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--warm-grey);
+    margin: 2.5rem 0;
+    border: 1px solid var(--warm-grey);
+  }
+
+  .info-cell {
+    background: var(--near-black);
+    padding: 1.2rem 1.4rem;
+  }
+
+  .info-cell .label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--amber-dim);
+    margin-bottom: 0.4rem;
+  }
+
+  .info-cell .value {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  .footer {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 5rem 2rem 3rem;
+    text-align: center;
+  }
+
+  .footer p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--mid-grey);
+    margin-bottom: 0.5em;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
+
+  @media (max-width: 600px) {
+    .section { padding: 3.5rem 1.5rem; }
+    .pullquote { padding: 2.5rem 1.5rem; }
+    .info-grid { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    html, body { background: white; color: #1a1a1a; }
+    .cover { min-height: auto; page-break-after: always; padding: 6rem 2rem; }
+    .cover-title { color: #1a1a1a; }
+    .cover-title .h-bracket { color: #8c5c3c; }
+    .section { padding: 2.5rem 2rem; }
+    .pullquote p { color: #8c5c3c; }
+    .info-cell, .format-block { background: #f5f5f0; }
+    p, .info-cell .value { color: #2a2a2a; }
+    .section-title { color: #1a1a1a; }
+    .cover-scroll { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER ==================== -->
+<section class="cover">
+  <div class="cover-label">Participatory Experience · Workshop Submission</div>
+
+  <h1 class="cover-title">THE WIT<span class="h-bracket">(H)</span>NESS</h1>
+
+  <p class="cover-subtitle">
+    A participatory experience about witnessing, being-with,<br>
+    and what your body knows before your mind decides.
+  </p>
+
+  <div class="cover-meta">
+    <span>Facilitated by Christian Gotthardt</span>
+    <div class="sep"></div>
+    <span>90 min · 15–30 participants · no audience</span>
+  </div>
+
+  <div class="cover-scroll">Read on</div>
+</section>
+
+<!-- ==================== AT A GLANCE ==================== -->
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-number">00</div>
+  <h2 class="section-title">At a <em>Glance</em></h2>
+
+  <div class="info-grid">
+    <div class="info-cell">
+      <div class="label">Format</div>
+      <div class="value">Participatory experience combining theatre and systemic constellation work</div>
+    </div>
+    <div class="info-cell">
+      <div class="label">Duration</div>
+      <div class="value">90 minutes, no break</div>
+    </div>
+    <div class="info-cell">
+      <div class="label">Participants</div>
+      <div class="value">15–30 people, no spectators</div>
+    </div>
+    <div class="info-cell">
+      <div class="label">Space needed</div>
+      <div class="value">Open floor, ~80 m², dimmable or dark</div>
+    </div>
+    <div class="info-cell">
+      <div class="label">Bring</div>
+      <div class="value">Nothing. Just yourself and the willingness to stand somewhere uncomfortable.</div>
+    </div>
+    <div class="info-cell">
+      <div class="label">Leave with</div>
+      <div class="value">Something you didn't know you knew.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== WHY THIS EXISTS ==================== -->
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-number">01</div>
+  <h2 class="section-title">Why this <em>exists</em></h2>
+
+  <p class="lead">
+    I'll be honest. I've been struggling with something for a while,
+    and I haven't found the right words for it. That's why I'm trying
+    a different medium.
+  </p>
+
+  <p>
+    I've been watching people speak on behalf of others who never
+    asked to be spoken for. I've been watching relationships between
+    real, complicated humans get translated into the language of power
+    structures until the humans disappear. I've been watching moral
+    purity become a currency — one that buys belonging for some and
+    silence for everyone else. I've been watching a discourse that
+    started with liberation develop a tone that shames, shrinks, and
+    shuts people up — while using the vocabulary of care.
+  </p>
+
+  <p>
+    And I've been watching, on the other side, how cynicism, contempt,
+    and raw populism feed on exactly this dynamic. And in between:
+    a silent middle that senses something is off but has no language
+    for it.
+  </p>
+
+  <p>
+    I don't know if my reading is right. But I know the experience is
+    shared — by more people than are talking about it. And I believe
+    a burn is one of the few places left where we can explore this
+    without immediately being sorted into camps.
+  </p>
+
+  <p class="quiet">
+    This is not a lecture. I have no thesis. I have questions and a
+    method that lets us explore them with our bodies instead of our
+    arguments.
+  </p>
+</section>
+
+<!-- ==================== PULLQUOTE ==================== -->
+<div class="pullquote">
+  <p>
+    Not: "Let me tell you what's right."<br>
+    But: "We're here. What happens between us?"
+  </p>
+</div>
+
+<!-- ==================== THE NAME ==================== -->
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-number">02</div>
+  <h2 class="section-title">The <em>name</em></h2>
+
+  <p>
+    <strong>Witness</strong> and <strong>Withness</strong> are one
+    letter apart.
+  </p>
+
+  <p>
+    To witness means to observe, to testify, to see from outside.
+    Withness — a term from process philosophy — means being embedded
+    in something, bodily, before thought kicks in. Not knowing
+    <em>about</em> — being <em>in</em>.
+  </p>
+
+  <p>
+    A lot of what passes for solidarity right now is witnessing without
+    withness. Seeing without being-with. Testifying without risking
+    anything. The (H) in the title marks this gap. It's a question:
+    Where did the being-with go? And can we get it back — not by
+    talking about it, but by standing in it?
+  </p>
+</section>
+
+<!-- ==================== WHAT HAPPENS ==================== -->
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-number">03</div>
+  <h2 class="section-title">What <em>happens</em></h2>
+
+  <p class="lead">
+    The experience combines two things: theatre sets a scene — you
+    step into it. There is no audience. Everyone is in the room,
+    standing in a position, feeling what it does to them, and then
+    switching.
+  </p>
+
+  <div class="format-block">
+    <div class="block-title">Step 1 — The scene is set</div>
+    <p>
+      I lay out a situation in the room — not as a story, but as a
+      set of positions marked by light. Each position has a name.
+      No judgment, no good guys, no bad guys. Just roles in a
+      constellation.
+    </p>
+    <p>
+      Example: <strong>The Affected</strong> — someone something
+      happened to. <strong>The Voice</strong> — someone speaking on
+      their behalf, unasked. <strong>The Named</strong> — the one
+      being spoken about. <strong>The Middle</strong> — watching,
+      uncomfortable, silent. <strong>The Absent</strong> — an empty
+      spot of light: the actual person who disappeared into the
+      abstraction.
+    </p>
+  </div>
+
+  <div class="format-block">
+    <div class="block-title">Step 2 — You choose a position</div>
+    <p>
+      Nobody assigns you. You walk to the position that pulls you.
+      That choice already tells you something. Why did you pick The
+      Voice and not The Middle? Why are you avoiding The Named?
+    </p>
+    <p>
+      Then: silence. You stand there and notice what it feels like.
+      Constellation work has a strange quality — people consistently
+      report that positions carry a felt sense independent of who
+      stands in them. You don't have to believe in anything mystical.
+      Just pay attention.
+    </p>
+  </div>
+
+  <div class="format-block">
+    <div class="block-title">Step 3 — You switch</div>
+    <p>
+      This is the core. You move to a different position. If you were
+      The Voice — righteous, certain, speaking truth to power — you
+      become The Named. The one being spoken about. The one reduced
+      to a category.
+    </p>
+    <p>
+      You don't argue about whether speaking for others is right or
+      wrong. You <em>stand</em> in both positions and feel the
+      difference. Your body gets it before your mind catches up.
+      That's the (H).
+    </p>
+  </div>
+
+  <p>
+    Between rounds, we share — briefly, one sentence each. Not
+    discussion, not debate. Just: What did you notice? What
+    surprised you?
+  </p>
+</section>
+
+<!-- ==================== THE SCENES ==================== -->
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-number">04</div>
+  <h2 class="section-title">The <em>scenes</em></h2>
+
+  <p>
+    We'll work with two or three constellations. Here's what I'm
+    developing — the final selection depends on the room and the
+    energy:
+  </p>
+
+  <div class="format-block">
+    <div class="block-title">Scene: "The Voice"</div>
+    <p>
+      Someone speaks on behalf of someone else who didn't ask.
+      Five positions: The Affected. The Voice. The Named (spoken
+      about, not spoken to). The Silent Middle. The Absent
+      (an empty position — the individual lost in the abstraction).
+    </p>
+    <p>
+      <em>What it explores:</em> The space between solidarity and
+      appropriation. Between care and control. What does it feel
+      like to be spoken for? What does it feel like to speak and
+      believe you're helping?
+    </p>
+  </div>
+
+  <div class="format-block">
+    <div class="block-title">Scene: "The Boundary"</div>
+    <p>
+      Three positions: The Protector — who means well. The Protected —
+      who didn't ask for protection. The Witness — who watches and
+      can't tell if this is love or a cage.
+    </p>
+    <p>
+      <em>What it explores:</em> When does care become constraint?
+      When does wanting to keep someone safe become wanting to keep
+      them small? And what does the witness owe to either of them?
+    </p>
+  </div>
+
+  <div class="format-block">
+    <div class="block-title">Scene: "The Mirror"</div>
+    <p>
+      Four positions: The Movement — certain of its righteousness.
+      The Expelled — who didn't pass the purity test. The Rule —
+      invisible, hovering above everyone. The Old Order — which turns
+      out to look familiar.
+    </p>
+    <p>
+      <em>What it explores:</em> What happens when a liberation
+      movement builds the same hierarchies it set out to dismantle?
+      Not out of malice — out of not knowing another model. What
+      does it feel like to be expelled by the people who were
+      supposed to free you?
+    </p>
+  </div>
+
+  <p class="quiet">
+    These scenes aren't arguments. They're spaces you walk into.
+    What you find there is yours.
+  </p>
+</section>
+
+<!-- ==================== PULLQUOTE ==================== -->
+<div class="pullquote">
+  <p>
+    You don't discuss whether speaking for others is right or wrong.<br>
+    You stand in both positions.<br>
+    Your body gets it before your mind catches up.
+  </p>
+</div>
+
+<!-- ==================== THE RUN ==================== -->
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-number">05</div>
+  <h2 class="section-title">The <em>run</em></h2>
+
+  <p>
+    <strong>Arrival (15 min).</strong> You enter one by one. The room
+    is dim — warm light pools mark the positions, still empty. No
+    explanation, no program. Walk the space. Read the positions.
+    Sit down when you're ready.
+  </p>
+
+  <p>
+    <strong>Scene I (30 min).</strong> I introduce the first
+    constellation — briefly, without judgment. You choose a position.
+    Silence. Notice. Then: one sentence each, standing where you
+    stand. <em>What do you feel here?</em> Then: switch. Same scene,
+    different position. Silence. Notice. Share.
+  </p>
+
+  <p>
+    <strong>Scene II (30 min).</strong> A second constellation.
+    Closer to the bone. The room is different now — you're more
+    awake, the silences are heavier, the words more precise.
+    Position. Switch. Share.
+  </p>
+
+  <p>
+    <strong>Closing (15 min).</strong> We come into a circle. No
+    summary, no takeaway, no lesson. Just: What are you leaving
+    with? What surprised you? Speak or be silent. The last silence
+    is the longest. Then we go.
+  </p>
+</section>
+
+<!-- ==================== WHAT THIS IS NOT ==================== -->
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-number">06</div>
+  <h2 class="section-title">What this <em>is not</em></h2>
+
+  <p>
+    <strong>Not a lecture.</strong> I have no thesis. I have observations
+    I can't articulate well enough in words — that's why I'm using
+    bodies and space instead.
+  </p>
+
+  <p>
+    <strong>Not therapy.</strong> There's no healing arc, no
+    resolution. The constellations open something up. What you do
+    with it is your business.
+  </p>
+
+  <p>
+    <strong>Not a debate.</strong> Nobody is asked to defend a position
+    intellectually. You stand in it physically. That's different. It
+    bypasses the part of us that already knows what we think and goes
+    to the part that still has questions.
+  </p>
+
+  <p>
+    <strong>Not a safe space</strong> in the sense of avoiding
+    discomfort. It's a brave space — one where discomfort is the
+    material, not the enemy. You might stand in a position that
+    disgusts you and notice something unexpected. That's the point.
+  </p>
+
+  <p>
+    <strong>Not an attack</strong> on any movement, any politics,
+    any side. The scenes don't have villains. They have humans in
+    positions — and the invitation to find out what each position
+    feels like from the inside.
+  </p>
+</section>
+
+<!-- ==================== ABOUT ME ==================== -->
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-number">07</div>
+  <h2 class="section-title">About <em>me</em></h2>
+
+  <p>
+    I'm not a theatre director or a trained facilitator. I come from
+    [background]. What drives me toward this form is a simple
+    frustration: when I talk about what I observe in public discourse —
+    the gap between intention and impact, the way moral language can
+    silence instead of liberate — I either get enthusiastic agreement
+    or instant defensiveness. Both miss the point.
+  </p>
+
+  <p>
+    I'm looking for a form that goes below the argument. Where
+    nuance is possible. Where you can hold two contradictory things
+    at once without having to choose a side. A burn feels like the
+    right place for this — because you're already outside the
+    default world, already willing to be uncomfortable, already
+    present in a way that's hard to access elsewhere.
+  </p>
+
+  <p>
+    This is my first time facilitating this format. I've developed
+    it over months of conversation, reading, and obsession. I know
+    what I want it to do. I don't know if it works. That's why
+    I need a room and people willing to find out with me.
+  </p>
+</section>
+
+<!-- ==================== NEEDS ==================== -->
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-number">08</div>
+  <h2 class="section-title">What I <em>need</em></h2>
+
+  <div class="info-grid">
+    <div class="info-cell">
+      <div class="label">Space</div>
+      <div class="value">Open floor, ideally enclosed or semi-enclosed. Needs to be dimmable. No chairs, no stage.</div>
+    </div>
+    <div class="info-cell">
+      <div class="label">Light</div>
+      <div class="value">Ground-level warm light — candles, lanterns, or dimmable LEDs. No overhead lighting. I'll bring light markers for the positions.</div>
+    </div>
+    <div class="info-cell">
+      <div class="label">Sound</div>
+      <div class="value">Silence. Possibly minimal ambient tone. No music. The room sounds like the people in it.</div>
+    </div>
+    <div class="info-cell">
+      <div class="label">Time slot</div>
+      <div class="value">90 min. Evening or night preferred — darkness helps. Not adjacent to loud sound camps.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CLOSING ==================== -->
+<div class="pullquote">
+  <p>
+    There are no spectators.<br>
+    You walk into the room, you stand somewhere,<br>
+    and you find out what that place knows<br>
+    that you don't.
+  </p>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<div class="divider"></div>
+
+<footer class="footer">
+  <p>THE WIT(H)NESS</p>
+  <p>Christian Gotthardt · 2026</p>
+  <p style="margin-top: 1.5rem; color: var(--warm-grey);">
+    Workshop submission · [Event Name] · [Date]
+  </p>
+</footer>
+
+</body>
+</html>
